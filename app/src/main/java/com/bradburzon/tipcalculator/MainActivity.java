@@ -32,11 +32,10 @@ public class MainActivity extends AppCompatActivity {
         twenty = (Button) findViewById(R.id.twenty);
 
         //setup
-        price.setText("Enterasd Price Check");
+        price.setText("Enter Price");
         ten.setBackgroundColor(Color.LTGRAY);
         fifteen.setBackgroundColor(Color.LTGRAY);
         twenty.setBackgroundColor(Color.LTGRAY);
-
 
         price.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,24 +47,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         ten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 twenty.setBackgroundColor(Color.LTGRAY);
                 ten.setBackgroundColor(Color.GREEN);
                 fifteen.setBackgroundColor(Color.LTGRAY);
-                if (price.getText().toString().isEmpty()) {
-                    tip.setText("tip");
-                    total.setText("total");
-                } else {
-                    price.setText(df.format(Double.parseDouble(price.getText().toString())));
-                    double tipf = Double.parseDouble(price.getText().toString()) * .10;
-
-                    tip.setText("$"+ df.format(tipf));
-                    total.setText(df.format(Double.parseDouble(Double.parseDouble(price.getText().toString()) + tipf + "")));
-                }
+                calculate(.10);
             }
         });
 
@@ -75,16 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 v.setBackgroundColor(Color.GREEN);
                 ten.setBackgroundColor(Color.LTGRAY);
                 twenty.setBackgroundColor(Color.LTGRAY);
-                if (price.getText().toString().isEmpty()) {
-                    tip.setText("tip");
-                    total.setText("total");
-                } else {
-                    price.setText(df.format(Double.parseDouble(price.getText().toString())));
-                    double tipf = Double.parseDouble(price.getText().toString()) * .15;
-
-                    tip.setText("$" + df.format(tipf));
-                    total.setText(df.format(Double.parseDouble(Double.parseDouble(price.getText().toString()) + tipf + "")));
-                }
+                calculate(.15);
             }
         });
 
@@ -94,22 +73,26 @@ public class MainActivity extends AppCompatActivity {
                 v.setBackgroundColor(Color.GREEN);
                 ten.setBackgroundColor(Color.LTGRAY);
                 fifteen.setBackgroundColor(Color.LTGRAY);
-                if (price.getText().toString().isEmpty()) {
-                    tip.setText("tip");
-                    total.setText("total");
-                } else {
-                    price.setText(df.format(Double.parseDouble(price.getText().toString())));
-                    double tipf = Double.parseDouble(price.getText().toString()) * .20;
-
-                    tip.setText("$"+df.format(tipf));
-                    total.setText(df.format(Double.parseDouble(Double.parseDouble(price.getText().toString()) + tipf + "")));
-                }
+                calculate(.20);
             }
         });
     }
 
-    public void setBackground(int color){
-        View view = this.getWindow().getDecorView();
-        view.setBackgroundColor(color);
+    public void calculate(double tipPercentage) {
+        try {
+            //input might be text from the start
+            double inputPrice = Double.parseDouble(price.getText().toString());
+            double priceFormatted = Double.parseDouble(df.format(inputPrice));
+            double tipFormatted =  Double.parseDouble(df.format(inputPrice * tipPercentage));
+            price.setText("" + priceFormatted);
+            tip.setText("$" +tipFormatted);
+            String totalPriceFormatted = df.format(priceFormatted + tipFormatted);
+            total.setText("$" + totalPriceFormatted);
+        } catch (Exception e) {
+            price.setText("");
+            tip.setText("tip");
+            total.setText("total");
+        }
     }
+
 }

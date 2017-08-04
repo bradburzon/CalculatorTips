@@ -14,17 +14,19 @@ import java.text.DecimalFormat;
 
 public class MainActivity extends AppCompatActivity {
 
-    EditText price;
-    TextView tip, total;
-    Button ten, fifteen, twenty;
-    DecimalFormat df;
+    private EditText price;
+    private TextView tip, total;
+    private Button ten, fifteen, twenty;
+    private DecimalFormat df;
     private double priceFormatted;
     private double tipFormatted;
+    private EditText customTip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //initialize
         df = new DecimalFormat("0.00");
@@ -34,12 +36,11 @@ public class MainActivity extends AppCompatActivity {
         ten = (Button) findViewById(R.id.ten);
         fifteen = (Button) findViewById(R.id.fifteen);
         twenty = (Button) findViewById(R.id.twenty);
+        customTip = (EditText) findViewById(R.id.customTip);
 
         //setup
         price.setText("");
-        ten.setBackgroundColor(Color.LTGRAY);
-        fifteen.setBackgroundColor(Color.LTGRAY);
-        twenty.setBackgroundColor(Color.LTGRAY);
+       fifteen.setBackgroundColor(Color.GREEN);
 
         TextWatcher inputTextWatcher = new TextWatcher() {
             @Override
@@ -55,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 double newPrice = 0;
-                double newTip = 0;
                 if (!editable.toString().isEmpty()) {
                     newPrice = Double.parseDouble(price.getText().toString());
                 }
@@ -73,39 +73,31 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 price.setText("");
                 tip.setText("");
-                ten.setBackgroundColor(Color.LTGRAY);
-                fifteen.setBackgroundColor(Color.LTGRAY);
-                twenty.setBackgroundColor(Color.LTGRAY);
+               calculate(15);
             }
         });
 
         ten.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                twenty.setBackgroundColor(Color.LTGRAY);
-                ten.setBackgroundColor(Color.GREEN);
-                fifteen.setBackgroundColor(Color.LTGRAY);
                 calculate(.10);
+                ten.setBackgroundColor(Color.GREEN);
             }
         });
 
         fifteen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackgroundColor(Color.GREEN);
-                ten.setBackgroundColor(Color.LTGRAY);
-                twenty.setBackgroundColor(Color.LTGRAY);
                 calculate(.15);
+                fifteen.setBackgroundColor(Color.GREEN);
             }
         });
 
         twenty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackgroundColor(Color.GREEN);
-                ten.setBackgroundColor(Color.LTGRAY);
-                fifteen.setBackgroundColor(Color.LTGRAY);
                 calculate(.20);
+                twenty.setBackgroundColor(Color.GREEN);
             }
         });
     }
@@ -113,10 +105,11 @@ public class MainActivity extends AppCompatActivity {
     public void calculate(double tipPercentage) {
         try {
             //input might be text from the start
+
             double inputPrice = Double.parseDouble(price.getText().toString());
             priceFormatted = Double.parseDouble(df.format(inputPrice));
             tipFormatted = Double.parseDouble(df.format(inputPrice * tipPercentage));
-            price.setText("" + priceFormatted);
+           // price.setText("" + priceFormatted);
             tip.setText("$" + tipFormatted);
             String totalPriceFormatted = df.format(priceFormatted + tipFormatted);
             total.setText("$" + totalPriceFormatted);
@@ -125,5 +118,9 @@ public class MainActivity extends AppCompatActivity {
             tip.setText("tip");
             total.setText("total");
         }
+
+        twenty.setBackgroundColor(Color.WHITE);
+        ten.setBackgroundColor(Color.WHITE);
+        fifteen.setBackgroundColor(Color.WHITE);
     }
 }
